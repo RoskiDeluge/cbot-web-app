@@ -18,29 +18,23 @@ export default async function handler(
     return res.status(400).json({error: "Prompt missing"})
   }
 
-  if (prompt.length > 100) {
+  if (prompt.length > 200) {
     return res.status(400).json({error: "Prompt too long"})
   }
 
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-    prompt: `I am a command line translation tool for MacOS.\n
-    Ask me what you want to do and I will tell you how to do it in a unix command.\n
-    Q: How do I copy a file\n
-    cp filename.txt destination_filename.txt\n
-    Q: How do I duplicate a folder?\n
-    cp -a source_folder/ destination_folder/\n
-    Q: How do display a calendar?\n
-    cal\n
-    Q: how do I convert a .heic file to jpg?\n
-    convert source.heic destination.jpg\n
-    Q: navigate to my desktop\n
-    cd ~/Desktop/\n
-    Q: How do I shutdown the computer?\n
-    sudo shutdown -h now\n
-    Q: ${prompt}\n`,
+    prompt: `I am a prompt generator for Stable Diffusion and Dalle2.\n
+    Give me the name of two artists and I will generate a prompt that combines their styles.\n
+    Artists: Rene Magritte and Georgia O'Keffe\n
+    Prompt: A surreal image of an orchid floating in outer space in the style of Rene Magritte and Georgia O'Keffe\n
+    Artists: Frida Kahlo and Ansel Adams\n
+    Prompt: A hyperrealistic photo of a burning orchid in the style of Frida Kahlo and Ansel Adams\n
+    Artists: Vincent Van Gough and Takashi Murakami\n
+    Prompt: An abstract image of an orchid explosion in a futuristic landscape in the style of Vincent Van gough and Takashi Murakami\n
+    Artists: ${prompt}\n`,
     max_tokens: 200,
-    temperature: 0.5,
+    temperature: 1, 
     presence_penalty: 0,
     frequency_penalty: 0,
   })
@@ -49,3 +43,4 @@ export default async function handler(
 
   res.status(200).json({command})
 }
+    

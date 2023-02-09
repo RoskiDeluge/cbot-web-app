@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { FormEvent, useState } from "react";
@@ -35,6 +33,31 @@ export default function Home() {
     }
   }
 
+  async function handleSubmitTwo(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const prompt = formData.get("prompt")?.toString().trim();
+
+    if (prompt) {
+      try {
+        setQuote("");
+        setQuoteLoadingError(false);
+        setQuoteLoading(true);
+
+        const response = await fetch(
+          "/api/orchidbot?prompt=" + encodeURIComponent(prompt)
+        );
+        const body = await response.json();
+        setQuote(body.command);
+      } catch (error) {
+        console.log(error);
+        setQuoteLoadingError(true);
+      } finally {
+        setQuoteLoading(false);
+      }
+    }
+  }
+
   return (
     <>
       <Head>
@@ -44,9 +67,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1>CBOT Web Demo</h1>
         <h3>Powered by GPT-3</h3>
-        <div>Enter a question and AI will generate the command.</div>
+        {/* <div>Enter a question and AI will generate the command.</div> */}
         <Form onSubmit={handleSubmit} className={styles.inputForm}>
           <Form.Group className="mb-3" controlId="prompt-input">
             <Form.Label>Get your command...</Form.Label>
@@ -57,7 +79,20 @@ export default function Home() {
             />
           </Form.Group>
           <Button type="submit" className="mb-3" disabled={quoteLoading}>
-            Go
+            Get Command
+          </Button>
+        </Form>
+        <Form onSubmit={handleSubmitTwo} className={styles.inputForm}>
+          <Form.Group className="mb-3" controlId="prompt-input">
+            <Form.Label>Get your image prompt...</Form.Label>
+            <Form.Control
+              name="prompt"
+              placeholder="e.g. Salvador Dali and Rene Magritte"
+              maxLength={100}
+            />
+          </Form.Group>
+          <Button type="submit" className="mb-3" disabled={quoteLoading}>
+            Get prompt
           </Button>
         </Form>
         {quoteLoading && <Spinner animation="border" />}
