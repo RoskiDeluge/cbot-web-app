@@ -67,7 +67,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h3>Powered by GPT-3</h3>
         {/* <div>Enter a question and AI will generate the command.</div> */}
         <Form onSubmit={handleSubmit} className={styles.inputForm}>
           <Form.Group className="mb-3" controlId="prompt-input">
