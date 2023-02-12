@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>CBOT Web Demo</title>
+        <title>cbot web</title>
         <meta name="description" content="by RD" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
